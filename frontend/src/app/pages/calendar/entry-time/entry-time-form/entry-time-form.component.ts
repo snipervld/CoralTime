@@ -101,6 +101,8 @@ export class EntryTimeFormComponent implements OnInit, OnDestroy {
 		setTimeout(() => {
 			if (this.currentTimeEntry.isFromToShow) {
 				this.fillFromToForm();
+			} else if (this.currentTimeEntry.timeTimerStart <= 0) {
+				this.fillFromInitForm();
 			}
 		}, 0);
 
@@ -491,6 +493,12 @@ export class EntryTimeFormComponent implements OnInit, OnDestroy {
 		this.isFromToFormShown = true;
 		this.fromTime = this.splitTime(this.currentTimeEntry.timeFrom);
 		this.toTime = this.splitTime(this.currentTimeEntry.timeTo);
+	}
+
+	private fillFromInitForm(): void {
+		const dayInfo = this.calendarService.getDayInfoByDate(date || this.timeEntry.date);
+		const lastEntry = dayInfo.timeEntries[dayInfo.timeEntries.length - 1];
+		this.fromTime = this.splitTime(lastEntry.timeFrom);
 	}
 
 	private removeNonActiveProjects(projectList: Project[]): Project[] {
